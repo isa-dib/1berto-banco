@@ -31,11 +31,15 @@ public class App {
                 banco.listarClientes();
             }else if(opcao == 6){
                 banco.listarContas();
-            }/*else if(opcao == 7){
+            }else if(opcao == 7){
                 banco.removerConta();
             }else if(opcao == 8){
                 banco.removerCliente();
-            }*/else if(opcao == 9){
+            }else if(opcao == 9){
+                banco.alterarLimite();
+            }else if(opcao == 10){
+                banco.aplicarInvestimento();
+            }else if(opcao == 11){
                 int resp;
                 resp = JOptionPane.showConfirmDialog(null, "Deseja finalizar?");
                 if(resp == JOptionPane.YES_OPTION) {

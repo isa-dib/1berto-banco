@@ -43,20 +43,17 @@ public class Banco{
     }
 
     public void listarClientes() {
-        clientes.values().forEach(cliente -> System.out.println(cliente.getNome()+ ", " + cliente.getClass()));
+        ArrayList<Cliente> listaClientes = new ArrayList<>(Banco.clientes.values());
+        StringBuilder aux = new StringBuilder();
+        listaClientes.forEach(cliente -> aux.append(cliente.getNome()).append(", ").append(cliente.getClass()).append(", ").append(cliente.getDataCadastro()).append("\n"));
+        JOptionPane.showMessageDialog(null,aux,"Listagem de Clientes", JOptionPane.DEFAULT_OPTION);
     }
 
     public void listarContas() {
-        contas.values().forEach(conta -> System.out.println(conta.getCliente().getNome() + ", saldo: " + conta.getSaldo() 
-        + ", " + conta.getClass()));
-    }
-
-    public void listarClientesPF() {
-        clientesPF.values().forEach(cliente -> System.out.println(cliente.getNome() + ", " + cliente.getCpf()));
-    }
-
-    public void listarClientesPJ() {
-        clientesPJ.values().forEach(cliente -> System.out.println(cliente.getNome() + ", " + cliente.getCnpj()));
+        ArrayList<Conta> listaContas = new ArrayList<>(Banco.contas.values());
+        StringBuilder aux = new StringBuilder();
+        listaContas.forEach(conta -> aux.append("Conta ").append(conta.getNumero()).append(", saldo R$").append(conta.getSaldo()).append(", ").append(conta.getClass()).append("\n"));
+        JOptionPane.showMessageDialog(null,aux,"Listagem de Contas", JOptionPane.DEFAULT_OPTION);
     }
 
     public Cliente buscarCliente(String id) {
@@ -71,26 +68,22 @@ public class Banco{
         return clientesPJ.get(cnpj);
     }
 
-    public void removerCliente(String id) {
-        Cliente cliente = clientes.get(id);
+    public void removerCliente() {
+        Cliente cliente = selecionarCliente();
         if (cliente instanceof PessoaFisica pf) clientesPF.remove(pf.getCpf());
         if (cliente instanceof PessoaJuridica pf) clientesPJ.remove(pf.getCnpj());
 
         contas.values().removeIf(conta -> conta.getCliente().equals(cliente));
-        clientes.remove(id);
+        clientes.remove(cliente.getId());
     }
 
-    public void removerClienteByCpf(String cpf){
-        PessoaFisica cliente = clientesPF.get(cpf);
-        removerCliente(cliente.getId());
-    }
-    public void removerClienteByCnpj(String cnpj){
-        PessoaJuridica cliente = clientesPJ.get(cnpj);
-        removerCliente(cliente.getId());
-    }
-
-    public void removerConta(String id) {
-        contas.remove(id);
+    public void removerConta() {
+        Conta conta = selecionarConta();
+        if(conta instanceof ContaPoupanca cp) contasPoupanca.remove(cp.getId());
+        if(conta instanceof ContaCorrente cc) contasCorrente.remove(cc.getId());
+        if(conta instanceof ContaInvestimento ci) contasInvestimento.remove(ci.getId());
+        contas.remove(conta.getId());
+        JOptionPane.showMessageDialog(null, "Conta removida com sucesso!", "Confirmação", JOptionPane.DEFAULT_OPTION);
     }
 
     public boolean verificarDuplicidadeCliente(Cliente cliente){
@@ -145,12 +138,12 @@ public class Banco{
     }
 
     private Conta selecionarConta(){
-        String id = JOptionPane.showInputDialog("Digite o número da conta que deseja realizar o depósito: ");
+        ArrayList<Conta> listaContas = new ArrayList<>(Banco.contas.values());
+        String id = JOptionPane.showInputDialog("Digite o número da conta: ");
         int numero = Integer.parseInt(id);
-        ArrayList<Conta> contas2 = new ArrayList<>(Banco.contas.values());
-        for (int i = 0; i < contas2.size(); i++) {
-            if(contas2.get(i).getNumero() == numero){
-                Conta conta = contas2.get(i);
+        for (int i = 0; i < listaContas.size(); i++) {
+            if(listaContas.get(i).getNumero() == numero){
+                Conta conta = listaContas.get(i);
                 return conta;
             }
         }
@@ -243,6 +236,31 @@ public class Banco{
         }
     }
 
+    public void alterarLimite(){
+        Conta conta = selecionarConta();
+        if (conta.getClass() == ContaCorrente.class) {
+            double limite = Double.parseDouble(JOptionPane.showInputDialog("Digite o novo limite da conta corrente: "));
+            ((ContaCorrente) conta).setLimite(limite);
+            JOptionPane.showMessageDialog(null, "Limite alterado com sucesso!", "Confirmação", JOptionPane.DEFAULT_OPTION);
+        }else if(conta.getClass() == ContaInvestimento.class||conta.getClass() == ContaPoupanca.class){
+            JOptionPane.showMessageDialog(null, "Tipo de conta inválido!", "Aviso", JOptionPane.WARNING_MESSAGE);
+        }
+    }
+
+    public void aplicarInvestimento(){
+        Conta conta = selecionarConta();
+        if (conta.getClass() == ContaInvestimento.class) {
+            ((ContaInvestimento) conta).aplicar();
+            JOptionPane.showMessageDialog(null, "Investimento aplicado com sucesso!", "Confirmação", JOptionPane.DEFAULT_OPTION);
+        }else if(conta.getClass() == ContaPoupanca.class){
+            ((ContaPoupanca) conta).aplicar();
+            JOptionPane.showMessageDialog(null, "Investimento aplicado com sucesso!", "Confirmação", JOptionPane.DEFAULT_OPTION);
+        }else if (conta.getClass() == ContaCorrente.class){
+            JOptionPane.showMessageDialog(null, "Tipo de conta inválido!", "Aviso", JOptionPane.WARNING_MESSAGE);
+            
+        }
+    }
+
     public void inicializarClientes(){
         String diretorioAtual = new File("").getAbsolutePath();
         String caminhoArquivoClientesPF = diretorioAtual + File.separator + "clientesPF.txt";
@@ -324,7 +342,8 @@ public class Banco{
             }
         }
     }
-        
+    
+    //eu sei que ficou muito longo, mas eu não tinha visto como usar tipos genéricos ainda
     public void finalizar() throws IOException{
         String nome = "clientes";
         FileWriter arquivo = new FileWriter(nome + ".txt");
@@ -377,5 +396,4 @@ public class Banco{
 
         JOptionPane.showMessageDialog(null, "Programa finalizado com sucesso!\nBye bye!!", "Confirmação", JOptionPane.DEFAULT_OPTION);
     }
-
 }
