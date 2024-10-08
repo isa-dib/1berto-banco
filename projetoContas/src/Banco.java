@@ -7,7 +7,7 @@ import java.io.FileReader;
 import java.io.FileWriter;
 import java.io.IOException;
 import java.time.LocalDate;
-import javax.swing.JOptionPane;
+import static javax.swing.JOptionPane.*;
 
 
 public class Banco{
@@ -46,14 +46,14 @@ public class Banco{
         ArrayList<Cliente> listaClientes = new ArrayList<>(Banco.clientes.values());
         StringBuilder aux = new StringBuilder();
         listaClientes.forEach(cliente -> aux.append(cliente.getNome()).append(", ").append(cliente.getClass()).append(", ").append(cliente.getDataCadastro()).append("\n"));
-        JOptionPane.showMessageDialog(null,aux,"Listagem de Clientes", JOptionPane.DEFAULT_OPTION);
+        showMessageDialog(null,aux,"Listagem de Clientes", DEFAULT_OPTION);
     }
 
     public void listarContas() {
         ArrayList<Conta> listaContas = new ArrayList<>(Banco.contas.values());
         StringBuilder aux = new StringBuilder();
         listaContas.forEach(conta -> aux.append("Conta ").append(conta.getNumero()).append(", saldo R$").append(conta.getSaldo()).append(", ").append(conta.getClass()).append("\n"));
-        JOptionPane.showMessageDialog(null,aux,"Listagem de Contas", JOptionPane.DEFAULT_OPTION);
+        showMessageDialog(null,aux,"Listagem de Contas", DEFAULT_OPTION);
     }
 
     public Cliente buscarCliente(String id) {
@@ -83,18 +83,18 @@ public class Banco{
         if(conta instanceof ContaCorrente cc) contasCorrente.remove(cc.getId());
         if(conta instanceof ContaInvestimento ci) contasInvestimento.remove(ci.getId());
         contas.remove(conta.getId());
-        JOptionPane.showMessageDialog(null, "Conta removida com sucesso!", "Confirmação", JOptionPane.DEFAULT_OPTION);
+        showMessageDialog(null, "Conta removida com sucesso!", "Confirmação", DEFAULT_OPTION);
     }
 
     public boolean verificarDuplicidadeCliente(Cliente cliente){
         if (cliente instanceof PessoaFisica pf) {
             if (clientesPF.containsKey(pf.getCpf())) {
-                JOptionPane.showMessageDialog(null, "Cliente já cadastrado!", "Aviso", JOptionPane.WARNING_MESSAGE);
+                showMessageDialog(null, "Cliente já cadastrado!", "Aviso", WARNING_MESSAGE);
                 return true;
             }
         } else if (cliente instanceof PessoaJuridica pj) {
             if (clientesPJ.containsKey(pj.getCnpj())) {
-                JOptionPane.showMessageDialog(null, "Cliente já cadastrado!", "Aviso", JOptionPane.WARNING_MESSAGE);
+                showMessageDialog(null, "Cliente já cadastrado!", "Aviso", WARNING_MESSAGE);
                 return true;
             }
         }
@@ -104,17 +104,17 @@ public class Banco{
     public boolean verificarDuplicidadeConta(Conta conta){
         if (conta instanceof ContaPoupanca cp) {
             if (contasPoupanca.containsKey(cp.getId())) {
-                JOptionPane.showMessageDialog(null, "Conta já cadastrada!", "Aviso", JOptionPane.WARNING_MESSAGE);
+                showMessageDialog(null, "Conta já cadastrada!", "Aviso", WARNING_MESSAGE);
                 return true;
             }
         } else if (conta instanceof ContaCorrente cc) {
             if (contasCorrente.containsKey(cc.getId())) {
-                JOptionPane.showMessageDialog(null, "Conta já cadastrada!", "Aviso", JOptionPane.WARNING_MESSAGE);
+                showMessageDialog(null, "Conta já cadastrada!", "Aviso", WARNING_MESSAGE);
                 return true;
             }
         } else if (conta instanceof ContaInvestimento ci) {
             if (contasInvestimento.containsKey(ci.getId())) {
-                JOptionPane.showMessageDialog(null, "Conta já cadastrada!", "Aviso", JOptionPane.WARNING_MESSAGE);
+                showMessageDialog(null, "Conta já cadastrada!", "Aviso", WARNING_MESSAGE);
                 return true;
             }
         }
@@ -122,15 +122,15 @@ public class Banco{
     }
 
     private Cliente selecionarCliente(){
-        String tipoPessoa = JOptionPane.showInputDialog("Digite o tipo do cliente (F|J)");
+        String tipoPessoa = showInputDialog("Digite o tipo do cliente (F|J)");
         boolean isFisica = tipoPessoa.trim().equalsIgnoreCase("f");
         if(isFisica){
-            String cpf = JOptionPane.showInputDialog("Digite o CPF do cliente: ");
+            String cpf = showInputDialog("Digite o CPF do cliente: ");
             Cliente cliente =  buscarClientePF(cpf);
             if(cliente == null)return null;
             return cliente;
         }else{
-            String cnpj = JOptionPane.showInputDialog("Digite o CNPJ do cliente: ");
+            String cnpj = showInputDialog("Digite o CNPJ do cliente: ");
             Cliente cliente =  buscarClientePJ(cnpj);
             if(cliente == null)return null;
             return cliente;
@@ -139,7 +139,7 @@ public class Banco{
 
     private Conta selecionarConta(){
         ArrayList<Conta> listaContas = new ArrayList<>(Banco.contas.values());
-        String id = JOptionPane.showInputDialog("Digite o número da conta: ");
+        String id = showInputDialog("Digite o número da conta: ");
         int numero = Integer.parseInt(id);
         for (int i = 0; i < listaContas.size(); i++) {
             if(listaContas.get(i).getNumero() == numero){
@@ -147,27 +147,27 @@ public class Banco{
                 return conta;
             }
         }
-        JOptionPane.showMessageDialog(null, "Conta não encontrada!", "Aviso", JOptionPane.WARNING_MESSAGE);
+        showMessageDialog(null, "Conta não encontrada!", "Aviso", WARNING_MESSAGE);
         return null;
     }
 
     public void cadastrarCliente(){
-        String nome = JOptionPane.showInputDialog("Digite o nome do cliente: ");
-        String tipo = JOptionPane.showInputDialog("Digite o tipo do cliente (F|J)");
+        String nome = showInputDialog("Digite o nome do cliente: ");
+        String tipo = showInputDialog("Digite o tipo do cliente (F|J)");
         boolean isFisica = tipo.trim().equalsIgnoreCase("f");
         if (isFisica) {
-            String cpf = JOptionPane.showInputDialog("Digite o CPF do cliente: ");
+            String cpf = showInputDialog("Digite o CPF do cliente: ");
             Cliente c = new PessoaFisica(nome, cpf);
             if(verificarDuplicidadeCliente(c)== false){
                 adicionarCliente(c);
-                JOptionPane.showMessageDialog(null, "Cliente cadastrado com sucesso!!", "Confirmação", JOptionPane.DEFAULT_OPTION);
+                showMessageDialog(null, "Cliente cadastrado com sucesso!!", "Confirmação", DEFAULT_OPTION);
             } 
         } else {
-            String cnpj = JOptionPane.showInputDialog("Digite o CNPJ do cliente: ");
+            String cnpj = showInputDialog("Digite o CNPJ do cliente: ");
             Cliente c = new PessoaJuridica(nome, cnpj);
             if(verificarDuplicidadeCliente(c)== false){
                 adicionarCliente(c);
-                JOptionPane.showMessageDialog(null, "Cliente cadastrado com sucesso!!", "Confirmação", JOptionPane.DEFAULT_OPTION);
+                showMessageDialog(null, "Cliente cadastrado com sucesso!!", "Confirmação", DEFAULT_OPTION);
             }
         }
     }
@@ -175,7 +175,7 @@ public class Banco{
     public void cadastrarConta(){
         Cliente cliente = selecionarCliente();
         int numero = this.numero;
-        String tipo = JOptionPane.showInputDialog("Digite o tipo da conta: \n( P | C | I )");
+        String tipo = showInputDialog("Digite o tipo da conta: \n( P | C | I )");
         boolean isPoupanca = tipo.trim().equalsIgnoreCase("p");
         boolean isCorrente = tipo.trim().equalsIgnoreCase("c");
         boolean isInvestimento = tipo.trim().equalsIgnoreCase("i");
@@ -183,20 +183,20 @@ public class Banco{
             Conta c = new ContaPoupanca(cliente, numero);
             if(verificarDuplicidadeConta(c)== false){
                 adicionarConta(c);
-                JOptionPane.showMessageDialog(null, "Conta cadastrada com sucesso!!\nNúmero da conta: "+ c.getNumero(), "Confirmação", JOptionPane.DEFAULT_OPTION);
+                showMessageDialog(null, "Conta cadastrada com sucesso!!\nNúmero da conta: "+ c.getNumero(), "Confirmação", DEFAULT_OPTION);
             }
         } else if (isCorrente) {
-            double limite = Double.parseDouble(JOptionPane.showInputDialog("Digite o limite da conta corrente: "));
+            double limite = Double.parseDouble(showInputDialog("Digite o limite da conta corrente: "));
             Conta c = new ContaCorrente(cliente, numero, limite);
             if(verificarDuplicidadeConta(c)== false){
                 adicionarConta(c);
-                JOptionPane.showMessageDialog(null, "Conta cadastrada com sucesso!!\nNúmero da conta: " + c.getNumero(), "Confirmação", JOptionPane.DEFAULT_OPTION);
+                showMessageDialog(null, "Conta cadastrada com sucesso!!\nNúmero da conta: " + c.getNumero(), "Confirmação", DEFAULT_OPTION);
             }
         } else if (isInvestimento) {
             Conta c = new ContaInvestimento(cliente, numero);
             if(verificarDuplicidadeConta(c)== false){
                 adicionarConta(c);
-                JOptionPane.showMessageDialog(null, "Conta cadastrada com sucesso!!\nNúmero da conta: " +c.getNumero(), "Confirmação", JOptionPane.DEFAULT_OPTION);
+                showMessageDialog(null, "Conta cadastrada com sucesso!!\nNúmero da conta: " +c.getNumero(), "Confirmação", DEFAULT_OPTION);
             }
         }
     }
@@ -204,34 +204,34 @@ public class Banco{
     public void realizarDeposito(){
         Conta conta = selecionarConta();
         if (conta == null) {
-            JOptionPane.showMessageDialog(null, "Conta não encontrada!", "Aviso", JOptionPane.WARNING_MESSAGE);
+            showMessageDialog(null, "Conta não encontrada!", "Aviso", WARNING_MESSAGE);
         } else if (conta.getClass() == ContaPoupanca.class) {
-            double valor = Double.parseDouble(JOptionPane.showInputDialog("Digite o valor do depósito: "));
+            double valor = Double.parseDouble(showInputDialog("Digite o valor do depósito: "));
             conta.depositar(valor);
-            JOptionPane.showMessageDialog(null, "Depósito realizado com sucesso!", "Confirmação", JOptionPane.DEFAULT_OPTION);
+            showMessageDialog(null, "Depósito realizado com sucesso!", "Confirmação", DEFAULT_OPTION);
         } else if (conta.getClass() == ContaCorrente.class) {
-            double valor = Double.parseDouble(JOptionPane.showInputDialog("Digite o valor do depósito: "));
+            double valor = Double.parseDouble(showInputDialog("Digite o valor do depósito: "));
             conta.depositar(valor);
-            JOptionPane.showMessageDialog(null, "Depósito realizado com sucesso!", "Confirmação", JOptionPane.DEFAULT_OPTION);
+            showMessageDialog(null, "Depósito realizado com sucesso!", "Confirmação", DEFAULT_OPTION);
         } else if (conta.getClass() == ContaInvestimento.class) {
-            double valor = Double.parseDouble(JOptionPane.showInputDialog("Digite o valor do depósito: "));
+            double valor = Double.parseDouble(showInputDialog("Digite o valor do depósito: "));
             conta.depositar(valor);
-            JOptionPane.showMessageDialog(null, "Depósito realizado com sucesso!", "Confirmação", JOptionPane.DEFAULT_OPTION);
+            showMessageDialog(null, "Depósito realizado com sucesso!", "Confirmação", DEFAULT_OPTION);
         }
     }
 
     public void realizarSaque(){
         Conta conta = selecionarConta();
         if (conta == null) {
-            JOptionPane.showMessageDialog(null, "Conta não encontrada!", "Aviso", JOptionPane.WARNING_MESSAGE);
+            showMessageDialog(null, "Conta não encontrada!", "Aviso", WARNING_MESSAGE);
         } else if (conta.getClass() == ContaPoupanca.class) {
-            double valor = Double.parseDouble(JOptionPane.showInputDialog("Digite o valor do saque: "));
+            double valor = Double.parseDouble(showInputDialog("Digite o valor do saque: "));
             conta.sacar(valor);
         } else if (conta.getClass() == ContaCorrente.class) {
-            double valor = Double.parseDouble(JOptionPane.showInputDialog("Digite o valor do saque: "));
+            double valor = Double.parseDouble(showInputDialog("Digite o valor do saque: "));
             conta.sacar(valor);
         } else if (conta.getClass() == ContaInvestimento.class) {
-            double valor = Double.parseDouble(JOptionPane.showInputDialog("Digite o valor do saque: "));
+            double valor = Double.parseDouble(showInputDialog("Digite o valor do saque: "));
             conta.sacar(valor);
         }
     }
@@ -239,11 +239,11 @@ public class Banco{
     public void alterarLimite(){
         Conta conta = selecionarConta();
         if (conta.getClass() == ContaCorrente.class) {
-            double limite = Double.parseDouble(JOptionPane.showInputDialog("Digite o novo limite da conta corrente: "));
+            double limite = Double.parseDouble(showInputDialog("Digite o novo limite da conta corrente: "));
             ((ContaCorrente) conta).setLimite(limite);
-            JOptionPane.showMessageDialog(null, "Limite alterado com sucesso!", "Confirmação", JOptionPane.DEFAULT_OPTION);
+            showMessageDialog(null, "Limite alterado com sucesso!", "Confirmação", DEFAULT_OPTION);
         }else if(conta.getClass() == ContaInvestimento.class||conta.getClass() == ContaPoupanca.class){
-            JOptionPane.showMessageDialog(null, "Tipo de conta inválido!", "Aviso", JOptionPane.WARNING_MESSAGE);
+            showMessageDialog(null, "Tipo de conta inválido!", "Aviso", WARNING_MESSAGE);
         }
     }
 
@@ -251,12 +251,12 @@ public class Banco{
         Conta conta = selecionarConta();
         if (conta.getClass() == ContaInvestimento.class) {
             ((ContaInvestimento) conta).aplicar();
-            JOptionPane.showMessageDialog(null, "Investimento aplicado com sucesso!", "Confirmação", JOptionPane.DEFAULT_OPTION);
+            showMessageDialog(null, "Investimento aplicado com sucesso!", "Confirmação", DEFAULT_OPTION);
         }else if(conta.getClass() == ContaPoupanca.class){
             ((ContaPoupanca) conta).aplicar();
-            JOptionPane.showMessageDialog(null, "Investimento aplicado com sucesso!", "Confirmação", JOptionPane.DEFAULT_OPTION);
+            showMessageDialog(null, "Investimento aplicado com sucesso!", "Confirmação", DEFAULT_OPTION);
         }else if (conta.getClass() == ContaCorrente.class){
-            JOptionPane.showMessageDialog(null, "Tipo de conta inválido!", "Aviso", JOptionPane.WARNING_MESSAGE);
+            showMessageDialog(null, "Tipo de conta inválido!", "Aviso", WARNING_MESSAGE);
             
         }
     }
@@ -394,6 +394,6 @@ public class Banco{
         }
         arquivo.close();
 
-        JOptionPane.showMessageDialog(null, "Programa finalizado com sucesso!\nBye bye!!", "Confirmação", JOptionPane.DEFAULT_OPTION);
+        showMessageDialog(null, "Programa finalizado com sucesso!\nBye bye!!", "Confirmação", DEFAULT_OPTION);
     }
 }

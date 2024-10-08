@@ -1,5 +1,5 @@
 import java.io.IOException;
-import javax.swing.JOptionPane;
+import static javax.swing.JOptionPane.*;
 
 public class App {
     private final static Banco banco = new Banco();
@@ -15,43 +15,47 @@ public class App {
         
 
         String inputi = "";
-        while (true) {
-            inputi = JOptionPane.showInputDialog("Bem-vindo ao " + banco.getBanco()+ "\n" + exibirMenu());
-            int opcao = Integer.parseInt(inputi);
+        try {
+            while (true) {
+                inputi = showInputDialog("Bem-vindo ao " + banco.getBanco()+ "\n" + exibirMenu());
+                int opcao = Integer.parseInt(inputi);
 
-            if(opcao == 1){
-                banco.cadastrarCliente();
-            }else if(opcao == 2){
-                banco.cadastrarConta();
-            }else if(opcao == 3){
-                banco.realizarDeposito();
-            }else if(opcao == 4){
-                banco.realizarSaque();
-            }else if(opcao == 5){
-                banco.listarClientes();
-            }else if(opcao == 6){
-                banco.listarContas();
-            }else if(opcao == 7){
-                banco.removerConta();
-            }else if(opcao == 8){
-                banco.removerCliente();
-            }else if(opcao == 9){
-                banco.alterarLimite();
-            }else if(opcao == 10){
-                banco.aplicarInvestimento();
-            }else if(opcao == 11){
-                int resp;
-                resp = JOptionPane.showConfirmDialog(null, "Deseja finalizar?");
-                if(resp == JOptionPane.YES_OPTION) {
-                    break;}
-                    else if(resp == JOptionPane.NO_OPTION || resp == JOptionPane.CANCEL_OPTION){
-                        JOptionPane.showMessageDialog(null, "Operação cancelada");
-                    }
-            }
-            else{
-                JOptionPane.showMessageDialog(null, "Opção inválida", "Erro", JOptionPane.ERROR_MESSAGE);
-            }
+                if(opcao == 1){
+                    banco.cadastrarCliente();
+                }else if(opcao == 2){
+                    banco.cadastrarConta();
+                }else if(opcao == 3){
+                    banco.realizarDeposito();
+                }else if(opcao == 4){
+                    banco.realizarSaque();
+                }else if(opcao == 5){
+                    banco.listarClientes();
+                }else if(opcao == 6){
+                    banco.listarContas();
+                }else if(opcao == 7){
+                    banco.removerConta();
+                }else if(opcao == 8){
+                    banco.removerCliente();
+                }else if(opcao == 9){
+                    banco.alterarLimite();
+                }else if(opcao == 10){
+                    banco.aplicarInvestimento();
+                }else if(opcao == 11){
+                    int resp;
+                    resp = showConfirmDialog(null, "Deseja finalizar?");
+                    if(resp == YES_OPTION) {
+                        break;}
+                        else if(resp == NO_OPTION || resp == CANCEL_OPTION){
+                            showMessageDialog(null, "Operação cancelada");
+                        }
+                }
+                else{
+                    showMessageDialog(null, "Opção inválida", "Erro", ERROR_MESSAGE);
+                }
 
+            }
+        } catch (NumberFormatException e){
+            showMessageDialog(null, "Opção inválida\n"+e.getMessage());
         }
         banco.finalizar();
     }

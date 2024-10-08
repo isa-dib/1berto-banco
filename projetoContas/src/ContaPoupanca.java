@@ -1,4 +1,4 @@
-import javax.swing.JOptionPane;
+import static javax.swing.JOptionPane.*;
 
 public class ContaPoupanca extends Conta implements Rendimento{
     private static double taxa = 0.005;
@@ -14,9 +14,9 @@ public class ContaPoupanca extends Conta implements Rendimento{
     public void sacar(double valor) {
         if (valor > 0 && valor <= saldo) {
             this.saldo -= valor;
-            JOptionPane.showMessageDialog(null, "Saque realizado com sucesso!", "Confirmação", JOptionPane.DEFAULT_OPTION);
+            showMessageDialog(null, "Saque realizado com sucesso!", "Confirmação", DEFAULT_OPTION);
         }else {
-            JOptionPane.showMessageDialog(null, "Saldo insuficiente", "Erro", JOptionPane.ERROR_MESSAGE);
+            showMessageDialog(null, "Saldo insuficiente", "Erro", ERROR_MESSAGE);
         }   
     }
 
@@ -31,7 +31,7 @@ public class ContaPoupanca extends Conta implements Rendimento{
 
     public void setTaxa(double valor) {
         if (valor < 0) {
-            JOptionPane.showMessageDialog(null, "A taxa não pode ser negativa", "Erro", JOptionPane.ERROR_MESSAGE);
+            showMessageDialog(null, "A taxa não pode ser negativa", "Erro", ERROR_MESSAGE);
             return;
         }
         taxa = valor;

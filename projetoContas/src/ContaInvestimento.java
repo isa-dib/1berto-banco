@@ -1,4 +1,4 @@
-import javax.swing.JOptionPane;
+import static javax.swing.JOptionPane.*;
 
 public class ContaInvestimento extends Conta implements Rendimento{
     private int quantidadeDepositos = 0;
@@ -24,9 +24,9 @@ public class ContaInvestimento extends Conta implements Rendimento{
     public void sacar(double valor) {
         if (valor > 0 && valor <= saldo && (quantidadeDepositos%3) == 0) {
             this.saldo -= valor;
-            JOptionPane.showMessageDialog(null, "Saque realizado com sucesso!", "Confirmação", JOptionPane.DEFAULT_OPTION);
+            showMessageDialog(null, "Saque realizado com sucesso!", "Confirmação", DEFAULT_OPTION);
         }else{
-            JOptionPane.showMessageDialog(null, "Não é possível realizar saque", "Erro", JOptionPane.ERROR_MESSAGE);
+            showMessageDialog(null, "Não é possível realizar saque", "Erro", ERROR_MESSAGE);
         }
     }
     public void depositar(double valor) {
@@ -41,7 +41,7 @@ public class ContaInvestimento extends Conta implements Rendimento{
 
     public void setTaxa(double valor) {
         if (valor < 0) {
-            JOptionPane.showMessageDialog(null, "A taxa não pode ser negativa", "Erro", JOptionPane.ERROR_MESSAGE);
+            showMessageDialog(null, "A taxa não pode ser negativa", "Erro", ERROR_MESSAGE);
             return;
         }
         taxa = valor;

@@ -1,4 +1,4 @@
-import javax.swing.JOptionPane;
+import static javax.swing.JOptionPane.*;
 
 public class ContaCorrente extends Conta{
     private double limite = 0;
@@ -37,9 +37,9 @@ public class ContaCorrente extends Conta{
     public void sacar(double valor) {
         if (valor > 0 && valor <= (limite + saldo)) {
             this.saldo -= valor;
-            JOptionPane.showMessageDialog(null, "Saque realizado com sucesso!", "Confirmação", JOptionPane.DEFAULT_OPTION);
+            showMessageDialog(null, "Saque realizado com sucesso!", "Confirmação", DEFAULT_OPTION);
         } else {
-            JOptionPane.showMessageDialog(null, "Saldo insuficiente", "Erro", JOptionPane.ERROR_MESSAGE);
+            showMessageDialog(null, "Saldo insuficiente", "Erro", ERROR_MESSAGE);
         }
     }
 
